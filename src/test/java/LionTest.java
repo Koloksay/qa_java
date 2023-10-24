@@ -7,6 +7,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -47,8 +49,16 @@ public class LionTest {
         assertEquals(1, lionFemale.getKittens());
     }
 
+    @Test
+    public void testGetFood() throws Exception {
+        Mockito.when(feline.eatMeat()).thenReturn(List.of("Мясо"));
+        assertEquals(List.of("Мясо"), lionMale.getFood());
+        assertEquals(List.of("Мясо"), lionFemale.getFood());
+    }
+
+
     @Test(expected = Exception.class)
     public void testInvalidSex() throws Exception {
-        Lion lionInvalidSex = new Lion(feline,"Invalid");
+        Lion lionInvalidSex = new Lion(feline, "Invalid");
     }
 }
