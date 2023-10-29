@@ -13,11 +13,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-// 1. Вызов метода doesHaveMane(), если "Самец"
-// 2. Вызов метода doesHaveMane(), если "Самка"
-// 3. Вызов метода doesHaveMane(), если другое значение
-// 4. Вызов метода getKittens(), создать Мок что запрашивает
-
 
 @RunWith(MockitoJUnitRunner.class)
 public class LionTest {
@@ -27,8 +22,6 @@ public class LionTest {
 
     private Lion lionMale;
     private Lion lionFemale;
-
-
 
     @Before
     public void setUp() throws Exception {
@@ -51,14 +44,22 @@ public class LionTest {
 
     @Test
     public void testGetFood() throws Exception {
-        Mockito.when(feline.eatMeat()).thenReturn(List.of("Мясо"));
-        assertEquals(List.of("Мясо"), lionMale.getFood());
-        assertEquals(List.of("Мясо"), lionFemale.getFood());
+        Mockito.when(feline.eatMeat()).thenReturn(List.of("Животные", "Птицы", "Рыба"));
+        assertEquals(List.of("Животные", "Птицы", "Рыба"), lionMale.getFood());
+        assertEquals(List.of("Животные", "Птицы", "Рыба"), lionFemale.getFood());
     }
-
 
     @Test(expected = Exception.class)
     public void testInvalidSex() throws Exception {
         Lion lionInvalidSex = new Lion(feline, "Invalid");
+    }
+
+    @Test
+    public void testInvalidSexErrorMessage() {
+        try {
+            Lion lionInvalidSex = new Lion(feline, "Invalid");
+        } catch (Exception e) {
+            assertEquals("Используйте допустимые значения пола животного - самец или самка", e.getMessage());
+        }
     }
 }
