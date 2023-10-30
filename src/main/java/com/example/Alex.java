@@ -5,7 +5,7 @@ import java.util.List;
 public class Alex extends Lion {
 
     public Alex() throws Exception {
-        super.hasMane=true;
+        super(new Feline(), "самец");
     }
 
     public List<String> getFriends() {

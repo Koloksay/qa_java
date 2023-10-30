@@ -26,8 +26,8 @@ public class LionTest {
     @Parameterized.Parameters
     public static Object[] getLionSex(){
         return new Object[][]{
-                {"Самец", true},
-                {"Самка", false}
+                {"самец", true},
+                {"самка", false}
         };
     }
     Feline feline=Mockito.mock(Feline.class);
