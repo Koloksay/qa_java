@@ -3,50 +3,55 @@ import com.example.Lion;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
+import org.junit.runners.Parameterized;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(Parameterized.class)
 public class LionTest {
-    @Mock
-    Feline feline;
 
+    private final String lionSex;
+    private final boolean isHaveMane;
+    private Lion lion;
 
-    private Lion lionMale;
-    private Lion lionFemale;
+    public LionTest(String lionSex, boolean isHaveMane){
+        this.lionSex=lionSex;
+        this.isHaveMane=isHaveMane;
+    }
+
+    @Parameterized.Parameters
+    public static Object[] getLionSex(){
+        return new Object[][]{
+                {"Самец", true},
+                {"Самка", false}
+        };
+    }
+    Feline feline=Mockito.mock(Feline.class);
 
     @Before
     public void setUp() throws Exception {
-        lionMale = new Lion(feline, "Самец");
-        lionFemale = new Lion(feline, "Самка");
+        lion = new Lion(feline, lionSex);
     }
-    // проверяет, что метод возвращает True, если было передано "Самец" и False, если нет
     @Test
     public void testHasMane() {
-        assertTrue(lionMale.doesHaveMane());
-        assertFalse(lionFemale.doesHaveMane());
+        boolean actual = lion.doesHaveMane();
+        assertEquals(isHaveMane, actual);
     }
 
     @Test
     public void testGetKittens() {
         Mockito.when(feline.getKittens()).thenReturn(1);
-        assertEquals(1, lionMale.getKittens());
-        assertEquals(1, lionFemale.getKittens());
+        assertEquals(1, lion.getKittens());
     }
 
     @Test
     public void testGetFood() throws Exception {
         Mockito.when(feline.eatMeat()).thenReturn(List.of("Животные", "Птицы", "Рыба"));
-        assertEquals(List.of("Животные", "Птицы", "Рыба"), lionMale.getFood());
-        assertEquals(List.of("Животные", "Птицы", "Рыба"), lionFemale.getFood());
+        assertEquals(List.of("Животные", "Птицы", "Рыба"), lion.getFood());
     }
 
     @Test(expected = Exception.class)
