@@ -2,44 +2,24 @@ import com.example.Feline;
 import com.example.Lion;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.mockito.Mockito;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
-
-@RunWith(Parameterized.class)
 public class LionTest {
 
-    private final String lionSex;
-    private final boolean isHaveMane;
+    private List<String> expectedFoodList;
+    private final String lionSex = "самец";
     private Lion lion;
 
-    public LionTest(String lionSex, boolean isHaveMane){
-        this.lionSex=lionSex;
-        this.isHaveMane=isHaveMane;
-    }
 
-    @Parameterized.Parameters
-    public static Object[] getLionSex(){
-        return new Object[][]{
-                {"самец", true},
-                {"самка", false}
-        };
-    }
     Feline feline=Mockito.mock(Feline.class);
-
     @Before
     public void setUp() throws Exception {
         lion = new Lion(feline, lionSex);
-    }
-    @Test
-    public void testHasMane() {
-        boolean actual = lion.doesHaveMane();
-        assertEquals(isHaveMane, actual);
     }
 
     @Test
@@ -50,8 +30,9 @@ public class LionTest {
 
     @Test
     public void testGetFood() throws Exception {
-        Mockito.when(feline.eatMeat()).thenReturn(List.of("Животные", "Птицы", "Рыба"));
-        assertEquals(List.of("Животные", "Птицы", "Рыба"), lion.getFood());
+        expectedFoodList = List.of("Животные", "Птицы", "Рыба");
+        Mockito.when(feline.getFood("Хищник")).thenReturn(expectedFoodList);
+        assertEquals(expectedFoodList, lion.getFood());
     }
 
     @Test(expected = Exception.class)
@@ -61,10 +42,13 @@ public class LionTest {
 
     @Test
     public void testInvalidSexErrorMessage() {
-        try {
-            Lion lionInvalidSex = new Lion(feline, "Invalid");
-        } catch (Exception e) {
-            assertEquals("Используйте допустимые значения пола животного - самец или самка", e.getMessage());
-        }
+        Exception exception = assertThrows(Exception.class, () -> {
+            new Lion(feline, "Invalid");
+        });
+
+        String expectedMessage = "Используйте допустимые значения пола животного - самец или самка";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 }

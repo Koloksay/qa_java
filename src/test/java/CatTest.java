@@ -1,10 +1,13 @@
 import com.example.Cat;
 import com.example.Feline;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -12,7 +15,6 @@ import static junit.framework.Assert.assertEquals;
 public class CatTest {
     @Mock
     Feline feline;
-
 
     @Test
     public void getSoundTest(){
@@ -24,17 +26,9 @@ public class CatTest {
     }
 
     @Test
-    public void getFoodTest() throws RuntimeException {
+    public void getFoodTest() throws Exception {
         Cat cat = new Cat(feline);
-        try {
-            cat.getFood();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            Mockito.verify(feline,Mockito.times(1)).eatMeat();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Mockito.when(feline.eatMeat()).thenReturn(List.of("Животные", "Птицы", "Рыба"));
+        assertEquals(List.of("Животные", "Птицы", "Рыба"), cat.getFood());
     }
 }
