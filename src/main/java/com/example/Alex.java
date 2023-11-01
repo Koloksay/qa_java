@@ -3,8 +3,9 @@ package com.example;
 import java.util.List;
 
 public class Alex extends Lion {
-    public Alex() throws Exception {
-        super(new Feline(), "самец");
+
+    public Alex(Feline feline) throws Exception {
+        super(feline, "самец");
     }
 
     public List<String> getFriends() {
